@@ -1,0 +1,2 @@
+[MESSAGES CONTROL]
+extension-pkg-whitelist=win32gui,win32process

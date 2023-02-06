@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        .modal img {
+            width: 200px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold">System wczesnego reagowania</h1>
+        <div class="col-lg-6 mx-auto mt-5">
+            <p class="lead mb-4">
+                To system wczesnego reagowania naszego statku. Jeśli wszystkie diody są zielone, jest ok.
+                Jeśli zapaliła się dioda czerwona musisz jak najszybciej powiadomić załogę statku
+                oraz zabezpieczyć dowód zaistnienia takiej sytuacji.
+            </p>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="details" data-bs-backdrop="details" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="img/penguins/pirates.png" alt="Pirates" id="modal-image">
+                    <div id="modal-message"></div>
+                    <div id="modal-date"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-close" type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-row="">Zamknij zgłoszenie</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <th>Stan</th>
+            <th>Miejsce</th>
+            <th>Akcja</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <img src="img/greenlight.gif" alt="OK">
+            </td>
+            <td>
+                Kajuta kapitana
+            </td>
+            <td>
+                Wszystko ok
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="img/greenlight.gif" alt="OK">
+            </td>
+            <td>
+                Lewa burta
+            </td>
+            <td>
+                Wszystko ok
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="img/greenlight.gif" alt="OK">
+            </td>
+            <td>
+                Prawa burta
+            </td>
+            <td>
+                Wszystko ok
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="img/greenlight.gif" alt="OK">
+            </td>
+            <td>
+                Dziub statku
+            </td>
+            <td>
+                Wszystko ok
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="img/greenlight.gif" alt="OK">
+            </td>
+            <td>
+                Rufa
+            </td>
+            <td>
+                Wszystko ok
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="img/greenlight.gif" alt="OK">
+            </td>
+            <td>
+                Bocianie gniazdo
+            </td>
+            <td>
+                Wszystko ok
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+<script>
+    const names = [
+        'Majtek Michał',
+        'Kapitan Kajtek',
+        'Bosman Bonifacy',
+        'Marynarz Marceli',
+        'Oficer Olaf'
+    ];
+
+    const messages = [
+        {image: "penguins/man_outside.png", text: "Człowiek za burtą!"},
+        {image: "penguins/island.png", text: "Kapitanie, widać ląd!"},
+        {image: "penguins/no_report.png", text: "Fałszywy alarm..."},
+        {image: "penguins/pirates.png", text: "Uwaga! Piraci!"},
+        {image: "penguins/lunch_break.png", text: "Przerwa!"},
+    ];
+
+    const markRowAsActive = function(n) {
+        n  = parseInt(n);
+        const randomRow = document.querySelector(`tbody tr:nth-child(${n})`)
+        const tds = randomRow.getElementsByTagName('td')
+        const lastTd = tds[tds.length - 1]
+
+        if(!randomRow.querySelector('img').src.includes('red')) {
+            randomRow.querySelector('img').src = randomRow.querySelector('img').src.replace('green', 'red')
+            lastTd.innerHTML = `<a href="#" data-rownumber="${n}" data-bs-toggle="modal" data-bs-target="#details">Sprawdź</a>`;
+        }
+    }
+
+    const markRowAsDone = function(n) {
+        n  = parseInt(n);
+        const randomRow = document.querySelector(`tbody tr:nth-child(${n})`)
+        const tds = randomRow.getElementsByTagName('td')
+        const lastTd = tds[tds.length - 1]
+
+        if(randomRow.querySelector('img').src.includes('red')) {
+            randomRow.querySelector('img').src = randomRow.querySelector('img').src.replace('red', 'green')
+            lastTd.innerHTML = `Wszystko ok`;
+        }
+    }
+    let counter = 10000
+
+    function getRandomInt(max) {
+        const value  = Math.floor(Math.random() * max)
+        if (value === 0) {
+            return getRandomInt(max);
+        }
+        return value;
+    }
+
+    var myFunction = function(){
+        markRowAsActive(getRandomInt(7));
+        setTimeout(myFunction, counter);
+    }
+
+    setTimeout(()=> myFunction(), counter);
+
+    const modalDetails = document.getElementById('details');
+
+    document.getElementById('modal-close').onclick = function() {
+        markRowAsDone(this.dataset.rownumber)
+    }
+
+    modalDetails.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget; // Button that triggered the modal
+
+        const event_at = new Date();
+        event_at.setDate(event_at.getDate() - 4 * 7);
+        const item = messages[Math.floor(Math.random() * messages.length)];
+        const person = names[Math.floor(Math.random() * messages.length)];
+
+        document.getElementById('modal-title').innerHTML = item.text;
+        document.getElementById('modal-close').dataset.rownumber = button.dataset.rownumber;
+        document.getElementById('modal-message').innerHTML = 'Raportuje <strong>' + person + '</strong> dnia <strong>' + event_at.toString() + '</strong>';
+        document.getElementById('modal-image').src = 'img/' + item.image;
+    });
+
+</script>
+</body>
+</html>
